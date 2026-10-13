@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة استجابات مقياس اضطراب نوبات الهلع</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-subtle: #eff6ff;
+      --secondary: #0f766e;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Cairo", "Tahoma", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0369a1 100%);
+      color: white;
+      padding: 32px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header-card h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .header-card .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .header-card p {
+      color: #e0f2fe;
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* User Info Card */
+    .user-info-card {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Sticky Progress Bar */
+    .progress-container {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #0f766e);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 9999px;
+    }
+
+    /* Questions List */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .question-card.answered {
+      border-color: #cbd5e1;
+    }
+
+    .question-card.highlight {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .question-title-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .question-num {
+      background: var(--primary-subtle);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-main);
+      padding-top: 3px;
+      line-height: 1.6;
+    }
+
+    /* Option Pills */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .options-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .options-grid > label:nth-child(5) {
+        grid-column: span 2;
+      }
+    }
+
+    .option-label {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 8px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-label:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .option-label input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .option-score-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .option-label.checked {
+      background: var(--primary-subtle);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.15);
+    }
+
+    .option-label.checked .option-text {
+      color: var(--primary);
+    }
+
+    /* Action Footer */
+    .actions-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    /* Report Section (Strictly Raw Scores - Zero Diagnosis) */
+    #reportSection {
+      display: none;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 32px 24px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .report-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .report-header h2 {
+      font-size: 1.5rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .report-meta-grid {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .report-meta-grid span strong {
+      color: var(--text-main);
+    }
+
+    /* Raw Score Summary Card */
+    .raw-score-banner {
+      background: var(--primary-subtle);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .raw-score-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .raw-score-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .raw-score-max {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Response Distribution */
+    .dist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .dist-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .dist-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .dist-count {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Detailed Responses Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+      margin-bottom: 24px;
+    }
+
+    .responses-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: right;
+    }
+
+    .responses-table th {
+      background: #f1f5f9;
+      color: var(--text-main);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .responses-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    .responses-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .specialist-notice {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      color: #166534;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Toast Notification */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #1e293b;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 12px 20px;
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 0.95rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    #toast.show {
+      visibility: visible;
+      animation: fadeinToast 0.3s, fadeoutToast 0.3s 2.7s;
+    }
+
+    @keyframes fadeinToast {
+      from { bottom: 10px; opacity: 0; }
+      to { bottom: 30px; opacity: 1; }
+    }
+
+    @keyframes fadeoutToast {
+      from { bottom: 30px; opacity: 1; }
+      to { bottom: 10px; opacity: 0; }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        color: black;
+      }
+      .progress-container, .actions-footer, .report-actions, #toast, .questions-list {
+        display: none !important;
+      }
+      .header-card {
+        background: none !important;
+        color: black !important;
+        border: 1px solid #ccc;
+        box-shadow: none !important;
+        padding: 16px;
+      }
+      .header-card h1 {
+        color: black !important;
+      }
+      .header-card p {
+        color: #555 !important;
+      }
+      #reportSection {
+        display: block !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0;
+      }
+      .raw-score-banner {
+        background: none !important;
+        border: 2px solid #333 !important;
+      }
+      .raw-score-value {
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header-card">
+      <div class="badge">استمارة إلكترونية للمشاركة</div>
+      <h1>اختبار اضطراب نوبات الهلع</h1>
+      <p>"يرجى الإجابة عن الأسئلة التالية وفقاً لمدى شعورك بكل حالة خلال الآونة الأخيرة."</p>
+    </header>
+
+    <!-- User Information -->
+    <section class="user-info-card">
+      <div class="form-group">
+        <label for="userName">الاسم:</label>
+        <input type="text" id="userName" placeholder="اسم المستجيب...">
+      </div>
+      <div class="form-group">
+        <label for="userAge">السن:</label>
+        <input type="number" id="userAge" placeholder="السن بالسنين...">
+      </div>
+      <div class="form-group">
+        <label for="testDate">تاريخ التطبيق:</label>
+        <input type="date" id="testDate">
+      </div>
+    </section>
+
+    <!-- Sticky Progress Tracker -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>نسبة إكمال البنود: <strong id="progressText">0 / 35 بند</strong></span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <main class="questions-list" id="questionsContainer">
+      <!-- Generated via JS -->
+    </main>
+
+    <!-- Main Submission Actions -->
+    <div class="actions-footer">
+      <button class="btn btn-primary" id="btnCalculate">
+        <span>📋</span> استخراج تقرير الاستجابات الخام للأخصائي
+      </button>
+      <button class="btn btn-secondary" id="btnReset">
+        <span>🔄</span> مسح الإجابات والبدء من جديد
+      </button>
+    </div>
+
+    <!-- Report Section (Strictly Raw Scores - Zero Diagnostic Labels) -->
+    <section id="reportSection">
+      <div class="report-header">
+        <h2>تقرير استجابات مقياس اضطراب نوبات الهلع</h2>
+        <div class="report-meta-grid">
+          <span>المستجيب: <strong id="repName">-</strong></span>
+          <span>السن: <strong id="repAge">-</strong></span>
+          <span>تاريخ الإجراء: <strong id="repDate">-</strong></span>
+        </div>
+      </div>
+
+      <!-- Raw Score Banner -->
+      <div class="raw-score-banner">
+        <div class="raw-score-title">إجمالي الدرجة الخام (Total Raw Score)</div>
+        <div class="raw-score-value" id="rawScoreDisplay">0</div>
+        <div class="raw-score-max">من أصل 140 درجة خام</div>
+      </div>
+
+      <!-- Notice for Specialist -->
+      <div class="specialist-notice">
+        <strong>📋 إشعار مهني للأخصائي النفسي / الطبيب المعالج:</strong><br>
+        هذا التقرير مخصص للمراجعة الإكلينيكية من قِبل الأخصائي النفسي. يحتوي التقرير حصراً على الدرجات الخام وتفصيل استجابات المفحوص على كافة بنود المقياس، ودون أي تصنيف تشخيصي مسبق، تمهيداً لقيام الأخصائي بإجراء التقييم التشخيصي الشامل وربطه بالمقابلة الإكلينيكية وتاريخ الحالة.
+      </div>
+
+      <!-- Response Distribution Summary -->
+      <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main);">توزيع اختيارات المفحوص عبر البنود:</h3>
+      <div class="dist-grid">
+        <div class="dist-card">
+          <div class="dist-label">دائماً (4)</div>
+          <div class="dist-count" id="countAlways">0</div>
+        </div>
+        <div class="dist-card">
+          <div class="dist-label">غالباً (3)</div>
+          <div class="dist-count" id="countOften">0</div>
+        </div>
+        <div class="dist-card">
+          <div class="dist-label">أحياناً (2)</div>
+          <div class="dist-count" id="countSometimes">0</div>
+        </div>
+        <div class="dist-card">
+          <div class="dist-label">نادراً (1)</div>
+          <div class="dist-count" id="countRarely">0</div>
+        </div>
+        <div class="dist-card">
+          <div class="dist-label">أبداً (0)</div>
+          <div class="dist-count" id="countNever">0</div>
+        </div>
+      </div>
+
+      <!-- Item by Item Breakdown Table -->
+      <h3 style="font-size: 1.05rem; margin-top: 24px; margin-bottom: 12px; color: var(--text-main);">جدول تفصيل الاستجابات والدرجات الخام لكل بند:</h3>
+      <div class="table-container">
+        <table class="responses-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">م</th>
+              <th>نص العبارة / البند</th>
+              <th style="width: 110px;">استجابة المفحوص</th>
+              <th style="width: 80px;">الدرجة الخام</th>
+            </tr>
+          </thead>
+          <tbody id="responsesTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Actions -->
+      <div class="report-actions">
+        <button class="btn btn-primary" id="btnCopyReport">
+          <span>📱</span> نسخ تقرير الاستجابات لإرساله للأخصائي (واتساب)
+        </button>
+        <button class="btn btn-secondary" id="btnPrintReport">
+          <span>🖨️</span> طباعة / حفظ كملف PDF
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast">تم نسخ تقرير الاستجابات بنجاح!</div>
+
+  <script>
+    const questions = ["أتجنب الذهاب لأماكن معينة مثل الأماكن المزدحمة ووسائل المواصلات خوفاً من حدوث نوبة.", "أراقب إشارات جسمي ونبضات قلبي وتنفسي بقلق وتركيز مستمرين.", "أثناء شعوري بالدوار، أخشى أن أفقد الوعي تماماً.", "أفسر التغيرات البسيطة في جسمي مثل التعب أو الدوخة على أنها مرض خطير.", "أشعر أن صعوبة التنفس تعني أنني قد أتعرض لمشكلة خطيرة.", "تأتي إلى ذهني أفكار مخيفة بمجرد أن تبدأ أعراض الهلع.", "أظل أفكر في احتمال تعرضي لنوبة جديدة حتى في غياب الأعراض.", "أتجنب الأنشطة التي أعتقد أنها قد تسبب لي أعراضاً تشبه أعراض الهلع.", "أتحاشى التواجد بمفردي في الأماكن العامة خشية أن تحدث لي كارثة ولا أجد من يساعدني.", "ينتابني قلق مستمر طوال الوقت بسبب الخوف من متى ستعود هذه الأعراض وتتكرر مرة أخرى.", "تراودني فكرة بأنني عاجز تماماً وأنه لن يمد لي أحد يد العون عندما تداهمني أعراض النوبة.", "أشعر أن نوبة الخوف من الممكن أن تقتلني.", "إذا رآني الناس في نوبة الخوف، فسوف أفقد احترامهم.", "أشعر بالرعب بمجرد أن ألاحظ أي تغيير طبيعي في جسمي، خوفاً من أن يتطور إلى نوبة هلع.", "يمنعني خوفي من النوبات من أداء مهام عملي أو دراستي بشكل طبيعي.", "عندما أشعر بتسارع في ضربات قلبي أفسر ذلك على أنني سأتعرض إلى أزمة قلبية.", "أعتقد أنني لن أعود طبيعياً مرة أخرى بعد نوبة الهلع.", "أشعر بالتوتر الشديد في الأماكن التي حدثت لي فيها نوبة من قبل.", "أحاول تشتيت تفكيري بسرعة أو كتم الأفكار عندما أشعر ببداية النوبة.", "عندما أشعر بأعراض جسدية مفاجئة، أعتقد أن هناك شيئاً خطيراً يحدث لي.", "أفكر تلقائياً أنني لن أستطيع السيطرة على نفسي أثناء نوبة الهلع.", "أشعر بالقلق من احتمال حدوث نوبة هلع في المستقبل.", "أتجنب الوجود في أماكن أو التعامل في مواقف خوفاً من حدوث نوبة هلع فيها.", "بعض الأعراض الجسدية البسيطة تجعلني أفكر في احتمالات مقلقة.", "عندما تزداد مشاعري السلبية، يصعب علي التفكير بطريقة هادئة.", "أخشى أن تعود إلي مشاعر مزعجة في وقت غير مناسب.", "أقتنع فور شعوري بزغللة في العين أو دوخة بأن هناك خللاً خطيراً في دماغي يحدث الآن.", "عندما تصيبني حالة الفزع، يجول بخاطري فوراً أنني سأفقد عقلي وأُصنَّف كمريض نفسي.", "أجد صعوبة في الاستمتاع بلحظاتي الحالية بسبب انشغالي الذهني بترقّب النوبة القادمة.", "تراودني أفكار ملحة بأن حدوث نوبة الهلع سيفقدني السيطرة التامة على نفسي أو يسبب لي جنوناً وإحراجاً شديداً أمام الآخرين.", "يستنزفني الخوف من المجهول والتحسب المستمر للحظة التي قد تباغتني فيها النوبة.", "أتعمد إشغال عقلي بعيداً أو الامتناع عن المواقف التي قد تذكرني بالنوبة لكي لا أحفز حدوثها.", "أشعر بالخوف الشديد عندما يزداد معدل ضربات قلبي بشكل مفاجئ.", "عندما أشعر بألم في صدري، أعتقد أنني قد أتعرض لخطر شديد.", "أشعر بالتوتر قبل دخول أماكن مررت فيها بتجربة هلع من قبل."];
+    const options = [{"label": "دائماً", "score": 4}, {"label": "غالباً", "score": 3}, {"label": "أحياناً", "score": 2}, {"label": "نادراً", "score": 1}, {"label": "أبداً", "score": 0}];
+
+    // State
+    const answers = new Array(questions.length).fill(null);
+
+    // DOM Elements
+    const questionsContainer = document.getElementById('questionsContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const btnCalculate = document.getElementById('btnCalculate');
+    const btnReset = document.getElementById('btnReset');
+    const reportSection = document.getElementById('reportSection');
+    const rawScoreDisplay = document.getElementById('rawScoreDisplay');
+    const repName = document.getElementById('repName');
+    const repAge = document.getElementById('repAge');
+    const repDate = document.getElementById('repDate');
+    const testDateInput = document.getElementById('testDate');
+    const btnPrintReport = document.getElementById('btnPrintReport');
+    const btnCopyReport = document.getElementById('btnCopyReport');
+    const toast = document.getElementById('toast');
+    const responsesTableBody = document.getElementById('responsesTableBody');
+
+    // Counts
+    const countAlways = document.getElementById('countAlways');
+    const countOften = document.getElementById('countOften');
+    const countSometimes = document.getElementById('countSometimes');
+    const countRarely = document.getElementById('countRarely');
+    const countNever = document.getElementById('countNever');
+
+    // Initialize Date to today
+    const today = new Date().toISOString().split('T')[0];
+    testDateInput.value = today;
+
+    // Render Questions
+    function renderQuestions() {
+      questionsContainer.innerHTML = '';
+      questions.forEach((qText, index) => {
+        const card = document.createElement('article');
+        card.className = 'question-card';
+        card.id = `qCard_${index}`;
+
+        const titleWrapper = document.createElement('div');
+        titleWrapper.className = 'question-title-wrapper';
+
+        const numSpan = document.createElement('div');
+        numSpan.className = 'question-num';
+        numSpan.textContent = index + 1;
+
+        const textSpan = document.createElement('div');
+        textSpan.className = 'question-text';
+        textSpan.textContent = qText;
+
+        titleWrapper.appendChild(numSpan);
+        titleWrapper.appendChild(textSpan);
+        card.appendChild(titleWrapper);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+
+        options.forEach((opt, optIndex) => {
+          const label = document.createElement('label');
+          label.className = 'option-label';
+          label.id = `optLabel_${index}_${optIndex}`;
+
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `question_${index}`;
+          radio.value = opt.score;
+          radio.dataset.qIndex = index;
+          radio.dataset.optIndex = optIndex;
+
+          radio.addEventListener('change', () => {
+            handleAnswerSelect(index, opt.score, optIndex, opt.label);
+          });
+
+          const optText = document.createElement('span');
+          optText.className = 'option-text';
+          optText.textContent = opt.label;
+
+          const scoreHint = document.createElement('span');
+          scoreHint.className = 'option-score-hint';
+          scoreHint.textContent = `(${opt.score} درجات)`;
+
+          label.appendChild(radio);
+          label.appendChild(optText);
+          label.appendChild(scoreHint);
+          optionsGrid.appendChild(label);
+        });
+
+        card.appendChild(optionsGrid);
+        questionsContainer.appendChild(card);
+      });
+    }
+
+    function handleAnswerSelect(qIndex, score, optIndex, optLabel) {
+      answers[qIndex] = { score, optIndex, label: optLabel };
+      
+      const card = document.getElementById(`qCard_${qIndex}`);
+      card.classList.add('answered');
+      card.classList.remove('highlight');
+
+      options.forEach((_, idx) => {
+        const lbl = document.getElementById(`optLabel_${qIndex}_${idx}`);
+        if (idx === optIndex) {
+          lbl.classList.add('checked');
+        } else {
+          lbl.classList.remove('checked');
+        }
+      });
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answeredCount = answers.filter(a => a !== null).length;
+      const total = questions.length;
+      const pct = Math.round((answeredCount / total) * 100);
+
+      progressText.textContent = `${answeredCount} / ${total} بند`;
+      progressPercent.textContent = `${pct}%`;
+      progressBar.style.width = `${pct}%`;
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.className = 'show';
+      setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+      }, 3000);
+    }
+
+    function generateReport() {
+      const unansweredIndices = [];
+      answers.forEach((ans, idx) => {
+        if (ans === null) unansweredIndices.push(idx);
+      });
+
+      if (unansweredIndices.length > 0) {
+        const firstMissing = unansweredIndices[0];
+        const card = document.getElementById(`qCard_${firstMissing}`);
+        card.classList.add('highlight');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast(`يرجى الإجابة عن البند رقم (${firstMissing + 1}) أولاً (متبقي ${unansweredIndices.length} بند)`);
+        return;
+      }
+
+      // Calculate total raw score
+      const totalScore = answers.reduce((sum, item) => sum + item.score, 0);
+      rawScoreDisplay.textContent = totalScore;
+
+      // Meta info
+      const nameVal = document.getElementById('userName').value.trim() || 'لم يُحدد';
+      const ageVal = document.getElementById('userAge').value.trim() || 'لم يُحدد';
+      const dateVal = testDateInput.value || today;
+
+      repName.textContent = nameVal;
+      repAge.textContent = ageVal;
+      repDate.textContent = dateVal;
+
+      // Distribution Counts
+      let c4 = 0, c3 = 0, c2 = 0, c1 = 0, c0 = 0;
+      answers.forEach(a => {
+        if (a.score === 4) c4++;
+        else if (a.score === 3) c3++;
+        else if (a.score === 2) c2++;
+        else if (a.score === 1) c1++;
+        else if (a.score === 0) c0++;
+      });
+      countAlways.textContent = c4;
+      countOften.textContent = c3;
+      countSometimes.textContent = c2;
+      countRarely.textContent = c1;
+      countNever.textContent = c0;
+
+      // Populate Table
+      responsesTableBody.innerHTML = '';
+      questions.forEach((qText, idx) => {
+        const tr = document.createElement('tr');
+        const ans = answers[idx];
+
+        tr.innerHTML = `
+          <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+          <td>${qText}</td>
+          <td style="font-weight: 600;">${ans ? ans.label : '-'}</td>
+          <td style="text-align: center; font-weight: 700; color: var(--primary);">${ans ? ans.score : '-'}</td>
+        `;
+        responsesTableBody.appendChild(tr);
+      });
+
+      reportSection.style.display = 'block';
+      reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetTest() {
+      if (confirm('هل أنت متأكد من رغبتك في مسح كافة الإجابات؟')) {
+        answers.fill(null);
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('.option-label').forEach(l => l.classList.remove('checked'));
+        document.querySelectorAll('.question-card').forEach(c => {
+          c.classList.remove('answered');
+          c.classList.remove('highlight');
+        });
+        updateProgress();
+        reportSection.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('تمت إعادة ضبط الاستمارة بنجاح');
+      }
+    }
+
+    function copyReportToClipboard() {
+      const totalScore = rawScoreDisplay.textContent;
+      const nameVal = repName.textContent;
+      const ageVal = repAge.textContent;
+      const dateVal = repDate.textContent;
+
+      let itemsSummary = '';
+      questions.forEach((qText, idx) => {
+        const ans = answers[idx];
+        itemsSummary += `${idx + 1}. ${qText}\n   [الإجابة: ${ans.label} | الدرجة: ${ans.score}]\n`;
+      });
+
+      const summaryText = `*تقرير استجابات مقياس اضطراب نوبات الهلع*\n` +
+        `----------------------------------------\n` +
+        `👤 المستجيب: ${nameVal}\n` +
+        `🎂 السن: ${ageVal}\n` +
+        `📅 تاريخ الإجراء: ${dateVal}\n` +
+        `----------------------------------------\n` +
+        `📊 إجمالي الدرجة الخام: ${totalScore} من 140\n` +
+        `----------------------------------------\n` +
+        `📈 توزيع الإجابات عبر البنود:\n` +
+        `- دائماً (4 درجات): ${countAlways.textContent}\n` +
+        `- غالباً (3 درجات): ${countOften.textContent}\n` +
+        `- أحياناً (درجتان): ${countSometimes.textContent}\n` +
+        `- نادراً (درجة واحدة): ${countRarely.textContent}\n` +
+        `- أبداً (0 درجات): ${countNever.textContent}\n` +
+        `----------------------------------------\n` +
+        `📋 تفصيل إجابات المفحوص على كافة البنود (35 بنداً):\n\n` +
+        itemsSummary +
+        `----------------------------------------\n` +
+        `📌 ملاحظة: هذا التقرير يحتوي حصراً على الدرجات الخام للاختبار وموجه للأخصائي النفسي لاستكمال التقييم والتشخيص الإكلينيكي.`;
+
+      navigator.clipboard.writeText(summaryText).then(() => {
+        showToast('تم نسخ التقرير بنجاح! يمكنك لصقه مباشرة في واتساب');
+      }).catch(() => {
+        alert('تعذر النسخ التلقائي، يمكنك استخدام زر الطباعة.');
+      });
+    }
+
+    // Event Listeners
+    btnCalculate.addEventListener('click', generateReport);
+    btnReset.addEventListener('click', resetTest);
+    btnPrintReport.addEventListener('click', () => window.print());
+    btnCopyReport.addEventListener('click', copyReportToClipboard);
+
+    // Initial Render
+    renderQuestions();
+    updateProgress();
+  </script>
+</body>
+</html>

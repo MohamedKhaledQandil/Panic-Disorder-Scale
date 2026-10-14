@@ -68,13 +68,24 @@
       margin-bottom: 12px;
     }
 
-    .header-card p {
+    .instructions-box {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      text-align: right;
       color: #e0f2fe;
-      font-size: 1.05rem;
-      max-width: 680px;
-      margin: 0 auto;
+      font-size: 0.95rem;
       line-height: 1.7;
-      font-style: italic;
+    }
+    
+    .instructions-box p {
+      margin-bottom: 8px;
+    }
+    
+    .instructions-box ul {
+      margin-right: 20px;
+      margin-top: 8px;
     }
 
     /* User Info Card */
@@ -102,6 +113,10 @@
       color: var(--text-main);
     }
 
+    .required-star {
+      color: #ef4444;
+    }
+
     .form-group input {
       padding: 10px 14px;
       border: 1.5px solid var(--border);
@@ -114,6 +129,16 @@
     .form-group input:focus {
       border-color: var(--border-focus);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    
+    .form-group input[readonly] {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+    
+    .input-error {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2;
     }
 
     /* Sticky Progress Bar */
@@ -317,6 +342,15 @@
       background: #f1f5f9;
       border-color: #cbd5e1;
     }
+    
+    .btn-download {
+      background: #0f766e;
+      color: white;
+    }
+    
+    .btn-download:hover {
+      background: #0d9488;
+    }
 
     /* Report Section (Strictly Raw Scores - Zero Diagnosis) */
     #reportSection {
@@ -510,7 +544,7 @@
         padding: 0;
         color: black;
       }
-      .progress-container, .actions-footer, .report-actions, #toast, .questions-list {
+      .progress-container, .actions-footer, .report-actions, #toast, .questions-list, .instructions-box, .user-info-card {
         display: none !important;
       }
       .header-card {
@@ -522,9 +556,6 @@
       }
       .header-card h1 {
         color: black !important;
-      }
-      .header-card p {
-        color: #555 !important;
       }
       #reportSection {
         display: block !important;
@@ -549,27 +580,30 @@
     <header class="header-card">
       <div class="badge">استمارة إلكترونية للمشاركة</div>
       <h1>مقياس اضطراب نوبات الهلع</h1>
-      <p>"بعض الأشخاص يعانون من نوبات مفاجئة من الخوف الشديد أو الانزعاج البالغ، والتي تبدأ فجأة وتصل إلى ذروتها بسرعة، ويصاحبها أعراض جسدية مثل تسارع ضربات القلب، ضيق التنفس، الدوار، أو الخوف من فقدان السيطرة."</p>
-      <p>بناءً على هذا الوصف، يُرجى قراءة الأسئلة التالية بعناية، واختيار إجابة واحدة لكل سؤال تعبر بدقة عن حالتك خلال الأيام السبعة الماضية.</p>
-      <ul>
-        <li>لا توجد إجابات صحيحة أو خاطئة، استجابتك الصادقة هي الأهم.</li>
-        <li>يُرجى التأكد من الإجابة عن جميع الأسئلة. </li>
-      </ul>
+      
+      <div class="instructions-box">
+        <p>بعض الأشخاص يعانون من نوبات مفاجئة من الخوف الشديد أو الانزعاج البالغ، والتي تبدأ فجأة وتصل إلى ذروتها بسرعة، ويصاحبها أعراض جسدية مثل تسارع ضربات القلب، ضيق التنفس، الدوار، أو الخوف من فقدان السيطرة.</p>
+        <p>بناءً على هذا الوصف، يُرجى قراءة الأسئلة التالية بعناية، واختيار إجابة واحدة لكل سؤال تعبر بدقة عن حالتك خلال <strong>الأيام السبعة الماضية</strong>.</p>
+        <ul>
+          <li>لا توجد إجابات صحيحة أو خاطئة، استجابتك الصادقة هي الأهم.</li>
+          <li>يُرجى التأكد من الإجابة عن جميع الأسئلة.</li>
+        </ul>
+      </div>
     </header>
 
     <!-- User Information -->
     <section class="user-info-card">
       <div class="form-group">
-        <label for="userName">الاسم:</label>
-        <input type="text" id="userName" placeholder="اسم المستجيب...">
+        <label for="userName">الاسم <span class="required-star">*</span>:</label>
+        <input type="text" id="userName" placeholder="الاسم ثلاثي أو رباعي..." required>
       </div>
       <div class="form-group">
-        <label for="userAge">السن:</label>
-        <input type="number" id="userAge" placeholder="السن بالسنين...">
+        <label for="userDOB">تاريخ الميلاد <span class="required-star">*</span>:</label>
+        <input type="date" id="userDOB" required>
       </div>
       <div class="form-group">
-        <label for="testDate">تاريخ التطبيق:</label>
-        <input type="date" id="testDate">
+        <label for="testDate">تاريخ التطبيق <span class="required-star">*</span>:</label>
+        <input type="date" id="testDate" readonly required>
       </div>
     </section>
 
@@ -592,7 +626,7 @@
     <!-- Main Submission Actions -->
     <div class="actions-footer">
       <button class="btn btn-primary" id="btnCalculate">
-        <span>📋</span> استخراج تقرير الاستجابات الخام للأخصائي
+        <span>📋</span> طباعة النتيجة
       </button>
       <button class="btn btn-secondary" id="btnReset">
         <span>🔄</span> مسح الإجابات والبدء من جديد
@@ -605,7 +639,7 @@
         <h2>تقرير استجابات مقياس اضطراب نوبات الهلع</h2>
         <div class="report-meta-grid">
           <span>المستجيب: <strong id="repName">-</strong></span>
-          <span>السن: <strong id="repAge">-</strong></span>
+          <span>تاريخ الميلاد: <strong id="repDOB">-</strong></span>
           <span>تاريخ الإجراء: <strong id="repDate">-</strong></span>
         </div>
       </div>
@@ -668,11 +702,11 @@
 
       <!-- Actions -->
       <div class="report-actions">
-        <button class="btn btn-primary" id="btnCopyReport">
-          <span>📱</span> نسخ تقرير الاستجابات لإرساله للأخصائي (واتساب)
+        <button class="btn btn-download btn-primary" id="btnPrintReport">
+          <span>⬇️</span> تنزيل PDF
         </button>
-        <button class="btn btn-secondary" id="btnPrintReport">
-          <span>🖨️</span> طباعة / حفظ كملف PDF
+        <button class="btn btn-secondary" id="btnCopyReport">
+          <span>📱</span> نسخ تقرير الاستجابات لإرساله للأخصائي (واتساب)
         </button>
       </div>
     </section>
@@ -697,9 +731,11 @@
     const reportSection = document.getElementById('reportSection');
     const rawScoreDisplay = document.getElementById('rawScoreDisplay');
     const repName = document.getElementById('repName');
-    const repAge = document.getElementById('repAge');
+    const repDOB = document.getElementById('repDOB');
     const repDate = document.getElementById('repDate');
     const testDateInput = document.getElementById('testDate');
+    const userNameInput = document.getElementById('userName');
+    const userDOBInput = document.getElementById('userDOB');
     const btnPrintReport = document.getElementById('btnPrintReport');
     const btnCopyReport = document.getElementById('btnCopyReport');
     const toast = document.getElementById('toast');
@@ -712,9 +748,13 @@
     const countRarely = document.getElementById('countRarely');
     const countNever = document.getElementById('countNever');
 
-    // Initialize Date to today
+    // Initialize Date to today automatically
     const today = new Date().toISOString().split('T')[0];
     testDateInput.value = today;
+
+    // Remove red borders on input
+    userNameInput.addEventListener('input', () => userNameInput.classList.remove('input-error'));
+    userDOBInput.addEventListener('input', () => userDOBInput.classList.remove('input-error'));
 
     // Render Questions
     function renderQuestions() {
@@ -815,6 +855,27 @@
     }
 
     function generateReport() {
+      // Validate inputs
+      const nameVal = userNameInput.value.trim();
+      const dobVal = userDOBInput.value;
+      const dateVal = testDateInput.value;
+
+      let hasError = false;
+      if (!nameVal) {
+        userNameInput.classList.add('input-error');
+        hasError = true;
+      }
+      if (!dobVal) {
+        userDOBInput.classList.add('input-error');
+        hasError = true;
+      }
+      
+      if (hasError) {
+        showToast('يرجى ملء البيانات الأساسية المطلوبة (الاسم وتاريخ الميلاد) أولاً.');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
       const unansweredIndices = [];
       answers.forEach((ans, idx) => {
         if (ans === null) unansweredIndices.push(idx);
@@ -833,14 +894,9 @@
       const totalScore = answers.reduce((sum, item) => sum + item.score, 0);
       rawScoreDisplay.textContent = totalScore;
 
-      // Meta info
-      const nameVal = document.getElementById('userName').value.trim() || 'لم يُحدد';
-      const ageVal = document.getElementById('userAge').value.trim() || 'لم يُحدد';
-      const dateVal = testDateInput.value || today;
-
       repName.textContent = nameVal;
-      repAge.textContent = ageVal;
-      repDate.textContent = dateVal;
+      repDOB.textContent = dobVal;
+      repDate.textContent = dateVal || today;
 
       // Distribution Counts
       let c4 = 0, c3 = 0, c2 = 0, c1 = 0, c0 = 0;
@@ -885,6 +941,11 @@
           c.classList.remove('answered');
           c.classList.remove('highlight');
         });
+        userNameInput.value = '';
+        userDOBInput.value = '';
+        userNameInput.classList.remove('input-error');
+        userDOBInput.classList.remove('input-error');
+        
         updateProgress();
         reportSection.style.display = 'none';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -895,7 +956,7 @@
     function copyReportToClipboard() {
       const totalScore = rawScoreDisplay.textContent;
       const nameVal = repName.textContent;
-      const ageVal = repAge.textContent;
+      const dobVal = repDOB.textContent;
       const dateVal = repDate.textContent;
 
       let itemsSummary = '';
@@ -907,7 +968,7 @@
       const summaryText = `*تقرير استجابات مقياس اضطراب نوبات الهلع*\n` +
         `----------------------------------------\n` +
         `👤 المستجيب: ${nameVal}\n` +
-        `🎂 السن: ${ageVal}\n` +
+        `🎂 تاريخ الميلاد: ${dobVal}\n` +
         `📅 تاريخ الإجراء: ${dateVal}\n` +
         `----------------------------------------\n` +
         `📊 إجمالي الدرجة الخام: ${totalScore} من 140\n` +

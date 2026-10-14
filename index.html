@@ -97,7 +97,7 @@
       box-shadow: var(--shadow);
       margin-bottom: 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
     }
 
@@ -117,16 +117,17 @@
       color: #ef4444;
     }
 
-    .form-group input {
+    .form-group input, .form-group select {
       padding: 10px 14px;
       border: 1.5px solid var(--border);
       border-radius: 8px;
       font-size: 0.95rem;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: white;
     }
 
-    .form-group input:focus {
+    .form-group input:focus, .form-group select:focus {
       border-color: var(--border-focus);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
@@ -138,7 +139,7 @@
     
     .input-error {
       border-color: #ef4444 !important;
-      background-color: #fef2f2;
+      background-color: #fef2f2 !important;
     }
 
     /* Sticky Progress Bar */
@@ -342,17 +343,8 @@
       background: #f1f5f9;
       border-color: #cbd5e1;
     }
-    
-    .btn-download {
-      background: #0f766e;
-      color: white;
-    }
-    
-    .btn-download:hover {
-      background: #0d9488;
-    }
 
-    /* Report Section (Strictly Raw Scores - Zero Diagnosis) */
+    /* Report Section */
     #reportSection {
       display: none;
       background: var(--card-bg);
@@ -379,13 +371,13 @@
     .report-header h2 {
       font-size: 1.5rem;
       color: var(--text-main);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .report-meta-grid {
       display: flex;
       justify-content: center;
-      gap: 24px;
+      gap: 20px;
       flex-wrap: wrap;
       font-size: 0.95rem;
       color: var(--text-muted);
@@ -394,6 +386,36 @@
 
     .report-meta-grid span strong {
       color: var(--text-main);
+    }
+
+    /* Screen Action Buttons inside Report */
+    .report-actions-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn-download-large {
+      background: var(--secondary);
+      color: white;
+      font-size: 1.15rem;
+      padding: 16px;
+      width: 100%;
+      justify-content: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.3);
+    }
+    
+    .btn-download-large:hover {
+      background: #0d9488;
+      transform: translateY(-2px);
+    }
+
+    .btn-copy-large {
+      width: 100%;
+      justify-content: center;
+      padding: 14px;
     }
 
     /* Raw Score Summary Card */
@@ -426,38 +448,15 @@
       margin-top: 6px;
     }
 
-    /* Response Distribution */
-    .dist-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .dist-card {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .dist-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .dist-count {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text-main);
+    /* Hidden elements on screen (Only for PDF/Print) */
+    .print-only-content {
+      display: none;
     }
 
     /* Detailed Responses Table */
     .table-container {
       overflow-x: auto;
-      margin-top: 20px;
+      margin-top: 16px;
       margin-bottom: 24px;
     }
 
@@ -494,14 +493,34 @@
       color: #166534;
       font-size: 0.92rem;
       line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .dist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
       margin-bottom: 24px;
     }
 
-    .report-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
+    .dist-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .dist-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .dist-count {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     /* Toast Notification */
@@ -537,14 +556,14 @@
       to { bottom: 10px; opacity: 0; }
     }
 
-    /* Print Styles */
+    /* Print / PDF Styles - Highly Optimized for fewer pages */
     @media print {
       body {
         background: white;
         padding: 0;
         color: black;
       }
-      .progress-container, .actions-footer, .report-actions, #toast, .questions-list, .instructions-box, .user-info-card {
+      .progress-container, .actions-footer, .report-actions-top, #toast, .questions-list, .instructions-box, .user-info-card {
         display: none !important;
       }
       .header-card {
@@ -562,13 +581,58 @@
         border: none !important;
         box-shadow: none !important;
         padding: 0;
+        margin: 0;
       }
+      
+      /* Show detailed content in print */
+      .print-only-content {
+        display: block !important;
+      }
+
+      /* Compact styling to save paper */
       .raw-score-banner {
         background: none !important;
         border: 2px solid #333 !important;
+        padding: 12px;
+        margin-bottom: 16px;
       }
       .raw-score-value {
         color: black !important;
+        font-size: 2.2rem;
+      }
+      .report-header {
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+      }
+      .specialist-notice {
+        padding: 12px;
+        font-size: 0.88rem;
+        margin-bottom: 16px;
+        border: 1px solid #555;
+        color: #000;
+        background: #f9f9f9;
+      }
+      .dist-grid {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .dist-card {
+        padding: 8px;
+        border: 1px solid #ccc;
+      }
+      .responses-table {
+        font-size: 0.85rem; /* Smaller font for table */
+      }
+      .responses-table th, .responses-table td {
+        padding: 6px 10px; /* Reduced padding */
+      }
+      .responses-table tr {
+        page-break-inside: avoid; /* Prevent row splitting */
+      }
+      h3 {
+        font-size: 1rem !important;
+        margin-top: 16px !important;
+        margin-bottom: 8px !important;
       }
     }
   </style>
@@ -596,6 +660,14 @@
       <div class="form-group">
         <label for="userName">الاسم <span class="required-star">*</span>:</label>
         <input type="text" id="userName" placeholder="الاسم ثلاثي أو رباعي..." required>
+      </div>
+      <div class="form-group">
+        <label for="userGender">الجنس <span class="required-star">*</span>:</label>
+        <select id="userGender" required>
+          <option value="" disabled selected>اختر الجنس...</option>
+          <option value="ذكر">ذكر</option>
+          <option value="أنثى">أنثى</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="userDOB">تاريخ الميلاد <span class="required-star">*</span>:</label>
@@ -633,15 +705,27 @@
       </button>
     </div>
 
-    <!-- Report Section (Strictly Raw Scores - Zero Diagnostic Labels) -->
+    <!-- Report Section -->
     <section id="reportSection">
       <div class="report-header">
-        <h2>تقرير استجابات مقياس اضطراب نوبات الهلع</h2>
+        <h2>نتيجة استجابات مقياس اضطراب نوبات الهلع</h2>
         <div class="report-meta-grid">
           <span>المستجيب: <strong id="repName">-</strong></span>
+          <span>الجنس: <strong id="repGender">-</strong></span>
           <span>تاريخ الميلاد: <strong id="repDOB">-</strong></span>
+          <span>العمر: <strong id="repAge">-</strong> سنة</span>
           <span>تاريخ الإجراء: <strong id="repDate">-</strong></span>
         </div>
+      </div>
+
+      <!-- Actions for User on Screen (Top priority, no scrolling needed) -->
+      <div class="report-actions-top">
+        <button class="btn btn-download-large btn-primary" id="btnPrintReport">
+          <span>⬇️</span> تنزيل التقرير التفصيلي PDF
+        </button>
+        <button class="btn btn-secondary btn-copy-large" id="btnCopyReport">
+          <span>📋</span> نسخ التقرير كنص (للحافظة)
+        </button>
       </div>
 
       <!-- Raw Score Banner -->
@@ -651,63 +735,56 @@
         <div class="raw-score-max">من أصل 140 درجة خام</div>
       </div>
 
-      <!-- Notice for Specialist -->
-      <div class="specialist-notice">
-        <strong>📋 إشعار مهني للأخصائي النفسي / الطبيب المعالج:</strong><br>
-        هذا التقرير مخصص للمراجعة الإكلينيكية من قِبل الأخصائي النفسي. يحتوي التقرير حصراً على الدرجات الخام وتفصيل استجابات المفحوص على كافة بنود المقياس، ودون أي تصنيف تشخيصي مسبق، تمهيداً لقيام الأخصائي بإجراء التقييم التشخيصي الشامل وربطه بالمقابلة الإكلينيكية وتاريخ الحالة.
-      </div>
+      <!-- PRINT ONLY CONTENT (Hidden on screen, visible only when PDF is generated) -->
+      <div class="print-only-content">
+        <!-- Notice for Specialist -->
+        <div class="specialist-notice">
+          <strong>📋 إشعار مهني للأخصائي النفسي / الطبيب المعالج:</strong><br>
+          هذا التقرير مخصص للمراجعة الإكلينيكية من قِبل الأخصائي النفسي. يحتوي التقرير حصراً على الدرجات الخام وتفصيل استجابات المفحوص على كافة بنود المقياس، ودون أي تصنيف تشخيصي مسبق، تمهيداً لقيام الأخصائي بإجراء التقييم التشخيصي الشامل وربطه بالمقابلة الإكلينيكية وتاريخ الحالة.
+        </div>
 
-      <!-- Response Distribution Summary -->
-      <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main);">توزيع اختيارات المفحوص عبر البنود:</h3>
-      <div class="dist-grid">
-        <div class="dist-card">
-          <div class="dist-label">دائماً (4)</div>
-          <div class="dist-count" id="countAlways">0</div>
+        <!-- Response Distribution Summary -->
+        <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main);">توزيع اختيارات المفحوص عبر البنود:</h3>
+        <div class="dist-grid">
+          <div class="dist-card">
+            <div class="dist-label">دائماً (4)</div>
+            <div class="dist-count" id="countAlways">0</div>
+          </div>
+          <div class="dist-card">
+            <div class="dist-label">غالباً (3)</div>
+            <div class="dist-count" id="countOften">0</div>
+          </div>
+          <div class="dist-card">
+            <div class="dist-label">أحياناً (2)</div>
+            <div class="dist-count" id="countSometimes">0</div>
+          </div>
+          <div class="dist-card">
+            <div class="dist-label">نادراً (1)</div>
+            <div class="dist-count" id="countRarely">0</div>
+          </div>
+          <div class="dist-card">
+            <div class="dist-label">أبداً (0)</div>
+            <div class="dist-count" id="countNever">0</div>
+          </div>
         </div>
-        <div class="dist-card">
-          <div class="dist-label">غالباً (3)</div>
-          <div class="dist-count" id="countOften">0</div>
-        </div>
-        <div class="dist-card">
-          <div class="dist-label">أحياناً (2)</div>
-          <div class="dist-count" id="countSometimes">0</div>
-        </div>
-        <div class="dist-card">
-          <div class="dist-label">نادراً (1)</div>
-          <div class="dist-count" id="countRarely">0</div>
-        </div>
-        <div class="dist-card">
-          <div class="dist-label">أبداً (0)</div>
-          <div class="dist-count" id="countNever">0</div>
-        </div>
-      </div>
 
-      <!-- Item by Item Breakdown Table -->
-      <h3 style="font-size: 1.05rem; margin-top: 24px; margin-bottom: 12px; color: var(--text-main);">جدول تفصيل الاستجابات والدرجات الخام لكل بند:</h3>
-      <div class="table-container">
-        <table class="responses-table">
-          <thead>
-            <tr>
-              <th style="width: 50px;">م</th>
-              <th>نص العبارة / البند</th>
-              <th style="width: 110px;">استجابة المفحوص</th>
-              <th style="width: 80px;">الدرجة الخام</th>
-            </tr>
-          </thead>
-          <tbody id="responsesTableBody">
-            <!-- Populated via JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Actions -->
-      <div class="report-actions">
-        <button class="btn btn-download btn-primary" id="btnPrintReport">
-          <span>⬇️</span> تنزيل PDF
-        </button>
-        <button class="btn btn-secondary" id="btnCopyReport">
-          <span>📱</span> نسخ تقرير الاستجابات لإرساله للأخصائي (واتساب)
-        </button>
+        <!-- Item by Item Breakdown Table -->
+        <h3 style="font-size: 1.05rem; margin-top: 24px; margin-bottom: 12px; color: var(--text-main);">جدول تفصيل الاستجابات والدرجات الخام لكل بند:</h3>
+        <div class="table-container">
+          <table class="responses-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">م</th>
+                <th>نص العبارة / البند</th>
+                <th style="width: 100px;">استجابة المفحوص</th>
+                <th style="width: 70px;">الدرجة الخام</th>
+              </tr>
+            </thead>
+            <tbody id="responsesTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   </div>
@@ -730,12 +807,21 @@
     const btnReset = document.getElementById('btnReset');
     const reportSection = document.getElementById('reportSection');
     const rawScoreDisplay = document.getElementById('rawScoreDisplay');
+    
+    // Summary Fields
     const repName = document.getElementById('repName');
+    const repGender = document.getElementById('repGender');
     const repDOB = document.getElementById('repDOB');
+    const repAge = document.getElementById('repAge');
     const repDate = document.getElementById('repDate');
+    
+    // Inputs
     const testDateInput = document.getElementById('testDate');
     const userNameInput = document.getElementById('userName');
+    const userGenderInput = document.getElementById('userGender');
     const userDOBInput = document.getElementById('userDOB');
+    
+    // Buttons
     const btnPrintReport = document.getElementById('btnPrintReport');
     const btnCopyReport = document.getElementById('btnCopyReport');
     const toast = document.getElementById('toast');
@@ -752,9 +838,23 @@
     const today = new Date().toISOString().split('T')[0];
     testDateInput.value = today;
 
-    // Remove red borders on input
+    // Remove red borders on input change
     userNameInput.addEventListener('input', () => userNameInput.classList.remove('input-error'));
+    userGenderInput.addEventListener('change', () => userGenderInput.classList.remove('input-error'));
     userDOBInput.addEventListener('input', () => userDOBInput.classList.remove('input-error'));
+
+    // Helper: Calculate Age
+    function calculateAge(dobStr, testDateStr) {
+      if (!dobStr || !testDateStr) return '-';
+      const dob = new Date(dobStr);
+      const test = new Date(testDateStr);
+      let age = test.getFullYear() - dob.getFullYear();
+      const m = test.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && test.getDate() < dob.getDate())) {
+        age--;
+      }
+      return Math.max(0, age); // Prevent negative age if weird dates entered
+    }
 
     // Render Questions
     function renderQuestions() {
@@ -857,6 +957,7 @@
     function generateReport() {
       // Validate inputs
       const nameVal = userNameInput.value.trim();
+      const genderVal = userGenderInput.value;
       const dobVal = userDOBInput.value;
       const dateVal = testDateInput.value;
 
@@ -865,13 +966,17 @@
         userNameInput.classList.add('input-error');
         hasError = true;
       }
+      if (!genderVal) {
+        userGenderInput.classList.add('input-error');
+        hasError = true;
+      }
       if (!dobVal) {
         userDOBInput.classList.add('input-error');
         hasError = true;
       }
       
       if (hasError) {
-        showToast('يرجى ملء البيانات الأساسية المطلوبة (الاسم وتاريخ الميلاد) أولاً.');
+        showToast('يرجى ملء البيانات الأساسية المطلوبة (الاسم، الجنس، تاريخ الميلاد) أولاً.');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
@@ -894,8 +999,11 @@
       const totalScore = answers.reduce((sum, item) => sum + item.score, 0);
       rawScoreDisplay.textContent = totalScore;
 
+      // Populate Meta
       repName.textContent = nameVal;
+      repGender.textContent = genderVal;
       repDOB.textContent = dobVal;
+      repAge.textContent = calculateAge(dobVal, dateVal || today);
       repDate.textContent = dateVal || today;
 
       // Distribution Counts
@@ -942,8 +1050,10 @@
           c.classList.remove('highlight');
         });
         userNameInput.value = '';
+        userGenderInput.value = '';
         userDOBInput.value = '';
         userNameInput.classList.remove('input-error');
+        userGenderInput.classList.remove('input-error');
         userDOBInput.classList.remove('input-error');
         
         updateProgress();
@@ -956,7 +1066,9 @@
     function copyReportToClipboard() {
       const totalScore = rawScoreDisplay.textContent;
       const nameVal = repName.textContent;
+      const genderVal = repGender.textContent;
       const dobVal = repDOB.textContent;
+      const ageVal = repAge.textContent;
       const dateVal = repDate.textContent;
 
       let itemsSummary = '';
@@ -968,7 +1080,8 @@
       const summaryText = `*تقرير استجابات مقياس اضطراب نوبات الهلع*\n` +
         `----------------------------------------\n` +
         `👤 المستجيب: ${nameVal}\n` +
-        `🎂 تاريخ الميلاد: ${dobVal}\n` +
+        `⚧ الجنس: ${genderVal}\n` +
+        `🎂 تاريخ الميلاد: ${dobVal} (العمر: ${ageVal} سنة)\n` +
         `📅 تاريخ الإجراء: ${dateVal}\n` +
         `----------------------------------------\n` +
         `📊 إجمالي الدرجة الخام: ${totalScore} من 140\n` +
@@ -988,7 +1101,7 @@
       navigator.clipboard.writeText(summaryText).then(() => {
         showToast('تم نسخ التقرير بنجاح! يمكنك لصقه مباشرة في واتساب');
       }).catch(() => {
-        alert('تعذر النسخ التلقائي، يمكنك استخدام زر الطباعة.');
+        alert('تعذر النسخ التلقائي، يرجى تنزيل الـ PDF.');
       });
     }
 

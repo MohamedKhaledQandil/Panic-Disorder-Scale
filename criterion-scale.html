@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مقياس اضطراب الهلع - مجلة الآداب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-subtle: #eff6ff;
+      --secondary: #0f766e;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Tahoma", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0369a1 100%);
+      color: white;
+      padding: 32px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header-card h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .header-card .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .instructions-box {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      text-align: right;
+      color: #e0f2fe;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    
+    .instructions-box p {
+      margin-bottom: 8px;
+    }
+    
+    .instructions-box ul {
+      margin-right: 20px;
+      margin-top: 8px;
+    }
+
+    /* User Info Card */
+    .user-info-card {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .required-star {
+      color: #ef4444;
+    }
+
+    .form-group input, .form-group select {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: white;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    
+    .form-group input[readonly] {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+    
+    .input-error {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    /* Sticky Progress Bar */
+    .progress-container {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #0f766e);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 9999px;
+    }
+
+    /* Questions List */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .question-card.answered {
+      border-color: #cbd5e1;
+    }
+
+    .question-card.highlight {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .question-title-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .question-num {
+      background: var(--primary-subtle);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      min-width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .question-text-container {
+      padding-top: 3px;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .question-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Option Pills (Modified for long text) */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-label:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .option-label input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      padding-right: 8px;
+      line-height: 1.5;
+    }
+
+    .option-label.checked {
+      background: var(--primary-subtle);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.15);
+    }
+
+    .option-label.checked .option-text {
+      color: var(--primary);
+    }
+
+    /* Action Footer */
+    .actions-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    /* Report Section */
+    #reportSection {
+      display: none;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 32px 24px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .report-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .report-header h2 {
+      font-size: 1.5rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .report-meta-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .report-meta-grid span strong {
+      color: var(--text-main);
+    }
+
+    /* Screen Action Buttons inside Report */
+    .report-actions-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn-download-large {
+      background: var(--secondary);
+      color: white;
+      font-size: 1.15rem;
+      padding: 16px;
+      width: 100%;
+      justify-content: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.3);
+    }
+    
+    .btn-download-large:hover {
+      background: #0d9488;
+      transform: translateY(-2px);
+    }
+
+    .btn-copy-large {
+      width: 100%;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    /* Raw Score Summary Card */
+    .raw-score-banner {
+      background: var(--primary-subtle);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .raw-score-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .raw-score-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .raw-score-max {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Hidden elements on screen (Only for PDF/Print) */
+    .print-only-content {
+      display: none;
+    }
+
+    /* Detailed Responses Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 16px;
+      margin-bottom: 24px;
+    }
+
+    .responses-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: right;
+    }
+
+    .responses-table th {
+      background: #f1f5f9;
+      color: var(--text-main);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .responses-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    .responses-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .specialist-notice {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      color: #166534;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* Toast Notification */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #1e293b;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 12px 20px;
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 0.95rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    #toast.show {
+      visibility: visible;
+      animation: fadeinToast 0.3s, fadeoutToast 0.3s 2.7s;
+    }
+
+    @keyframes fadeinToast {
+      from { bottom: 10px; opacity: 0; }
+      to { bottom: 30px; opacity: 1; }
+    }
+
+    @keyframes fadeoutToast {
+      from { bottom: 30px; opacity: 1; }
+      to { bottom: 10px; opacity: 0; }
+    }
+
+    /* Print / PDF Styles - Highly Optimized for perfect output */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        color: black;
+      }
+      .progress-container, .actions-footer, .report-actions-top, #toast, .questions-list, .instructions-box, .user-info-card, .header-card {
+        display: none !important;
+      }
+      #reportSection {
+        display: block !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0;
+        margin: 0;
+      }
+      
+      /* Show detailed content in print */
+      .print-only-content {
+        display: block !important;
+      }
+
+      /* Compact styling to save paper */
+      .raw-score-banner {
+        background: none !important;
+        border: 2px solid #333 !important;
+        padding: 12px;
+        margin-bottom: 16px;
+      }
+      .raw-score-value {
+        color: black !important;
+        font-size: 2.2rem;
+      }
+      .report-header {
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+      }
+      .specialist-notice {
+        padding: 12px;
+        font-size: 0.88rem;
+        margin-bottom: 16px;
+        border: 1px solid #555;
+        color: #000;
+        background: #f9f9f9;
+      }
+      .responses-table {
+        font-size: 0.85rem;
+      }
+      .responses-table th, .responses-table td {
+        padding: 6px 10px;
+      }
+      .responses-table tr {
+        page-break-inside: avoid;
+      }
+      h3 {
+        font-size: 1rem !important;
+        margin-top: 16px !important;
+        margin-bottom: 8px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header-card">
+      <div class="badge">وفقاً لنسخة مجلة الآداب للدراسات النفسية والتربوية</div>
+      <h1>مقياس اضطراب الهلع</h1>
+      
+      <div class="instructions-box">
+        <p>يرجى قراءة كل سؤال بعناية واختيار الإجابة التي تصف حالتك بدقة خلال <strong>الأسبوع الماضي</strong>.</p>
+        <ul>
+          <li>لا توجد إجابات صحيحة أو خاطئة، استجابتك الصادقة هي الأهم.</li>
+          <li>يُرجى التأكد من الإجابة عن جميع الأسئلة.</li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- User Information -->
+    <section class="user-info-card">
+      <div class="form-group">
+        <label for="userName">الاسم <span class="required-star">*</span>:</label>
+        <input type="text" id="userName" placeholder="الاسم ثلاثي أو رباعي..." required>
+      </div>
+      <div class="form-group">
+        <label for="userGender">الجنس <span class="required-star">*</span>:</label>
+        <select id="userGender" required>
+          <option value="" disabled selected>اختر الجنس...</option>
+          <option value="ذكر">ذكر</option>
+          <option value="أنثى">أنثى</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="userDOB">تاريخ الميلاد <span class="required-star">*</span>:</label>
+        <input type="date" id="userDOB" required>
+      </div>
+      <div class="form-group">
+        <label for="testDate">تاريخ التطبيق <span class="required-star">*</span>:</label>
+        <input type="date" id="testDate" readonly required>
+      </div>
+    </section>
+
+    <!-- Sticky Progress Tracker -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>نسبة إكمال البنود: <strong id="progressText">0 / 7 بنود</strong></span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <main class="questions-list" id="questionsContainer">
+      <!-- Generated via JS -->
+    </main>
+
+    <!-- Main Submission Actions -->
+    <div class="actions-footer">
+      <button class="btn btn-primary" id="btnCalculate">
+        <span>📋</span> استخراج النتيجة
+      </button>
+      <button class="btn btn-secondary" id="btnReset">
+        <span>🔄</span> مسح الإجابات والبدء من جديد
+      </button>
+    </div>
+
+    <!-- Report Section -->
+    <section id="reportSection">
+      <div class="report-header">
+        <h2>تقرير مقياس اضطراب الهلع (المُقنن)</h2>
+        <div class="report-meta-grid">
+          <span>المستجيب: <strong id="repName">-</strong></span>
+          <span>الجنس: <strong id="repGender">-</strong></span>
+          <span>تاريخ الميلاد: <strong id="repDOB">-</strong></span>
+          <span>العمر: <strong id="repAge">-</strong> سنة</span>
+          <span>تاريخ الإجراء: <strong id="repDate">-</strong></span>
+        </div>
+      </div>
+
+      <!-- Actions for User on Screen -->
+      <div class="report-actions-top">
+        <button class="btn btn-download-large btn-primary" id="btnPrintReport">
+          <span>⬇️</span> تنزيل التقرير التفصيلي PDF
+        </button>
+        <button class="btn btn-secondary btn-copy-large" id="btnCopyReport">
+          <span>📋</span> نسخ التقرير كنص (للحافظة)
+        </button>
+      </div>
+
+      <!-- Raw Score Banner -->
+      <div class="raw-score-banner">
+        <div class="raw-score-title">إجمالي الدرجة الخام (Total Raw Score)</div>
+        <div class="raw-score-value" id="rawScoreDisplay">0</div>
+        <div class="raw-score-max">من أصل 28 درجة خام</div>
+      </div>
+
+      <!-- PRINT ONLY CONTENT (Hidden on screen, visible only when PDF is generated) -->
+      <div class="print-only-content">
+        <!-- Notice for Specialist -->
+        <div class="specialist-notice">
+          <strong>📋 إشعار مهني للأخصائي النفسي / الطبيب المعالج:</strong><br>
+          هذا التقرير مخصص للمراجعة الإكلينيكية من قِبل الأخصائي النفسي. يحتوي التقرير حصراً على الدرجات الخام وتفصيل استجابات المفحوص على كافة بنود المقياس، ودون أي تصنيف تشخيصي مسبق، تمهيداً لقيام الأخصائي بإجراء التقييم التشخيصي الشامل وربطه بالمقابلة الإكلينيكية وتاريخ الحالة.
+        </div>
+
+        <!-- Item by Item Breakdown Table -->
+        <h3 style="font-size: 1.05rem; margin-top: 24px; margin-bottom: 12px; color: var(--text-main);">جدول تفصيل الاستجابات والدرجات الخام لكل بند:</h3>
+        <div class="table-container">
+          <table class="responses-table">
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;">م</th>
+                <th>نص العبارة / البند</th>
+                <th>استجابة المفحوص</th>
+                <th style="width: 70px; text-align: center;">الدرجة</th>
+              </tr>
+            </thead>
+            <tbody id="responsesTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast">رسالة تنبيه</div>
+
+  <script>
+    // Data structure for the new 7-item scale
+    const questionsData = [
+      {
+        q: "كم عدد نوبات الهلع أو \"نوبات الأعراض المحدودة\" التي مررت بها خلال الأسبوع الماضي؟",
+        sub: "",
+        options: [
+          { s: 0, l: "0 - لا توجد نوبات هلع، أو لا توجد نوبات بأعراض محدودة." },
+          { s: 1, l: "1 - خفيفة: لا توجد نوبات هلع كاملة أو نوبة هلع محدودة الأعراض واحدة يوميا." },
+          { s: 2, l: "2 - متوسطة: نوبة أو نوبتان كاملتان و/ أو نوبات هلع محدودة الأعراض متعددة يوميا." },
+          { s: 3, l: "3 - شديدة: أكثر من نوبتين كاملتين، ولكن لا تزيد عن معدل نوبة واحدة يوميا في المتوسط." },
+          { s: 4, l: "4 - شديدة للغاية: نوبات هلع كاملة حدثت أكثر من مرة يوميا، في معظم الأيام." }
+        ]
+      },
+      {
+        q: "إذا كنت قد عانيت من أي نوبات هلع خلال الأسبوع الماضي، فإلى أي مدى كانت مرعبة أو مقلقة أثناء حدوثها؟",
+        sub: "(إذا مررت بأكثر من نوبة، ضع متوسط التقييم، إذا لم تكن هناك نوبات هلع ولكن كانت هناك نوبات أعراض محدودة، أجب عن النوبات المحدودة).",
+        options: [
+          { s: 0, l: "0 - ليست مخيفة على الإطلاق، أو لا توجد نوبات هلع أو أعراض هلع محدودة خلال الأسبوع الماضي." },
+          { s: 1, l: "1 - مخيفة قليلا (لكنها ليست شديدة)." },
+          { s: 2, l: "2 - مخيفة بشكل معتدل (شديدة، ولكن يمكن التحكم فيها)." },
+          { s: 3, l: "3 - مخيفة بشدة (شديدة للغاية)." },
+          { s: 4, l: "4 - مخيفة للغاية (ضيق شديد أثناء النوبات)." }
+        ]
+      },
+      {
+        q: "خلال الأسبوع الماضي: إلى أي مدى شعرت بالقلق أو التوتر بشأن موعد حدوث نوبة الهلع التالية أو بشأن المخاوف المتعلقة بالنوبات؟",
+        sub: "على سبيل المثال: (قد تعتقد أنها تعني أنك تعاني من مشاكل جسدية أو نفسية أو قد تسبب لك إحراجا اجتماعيا).",
+        options: [
+          { s: 0, l: "0 - لا شيء على الإطلاق." },
+          { s: 1, l: "1 - أحيانا أو بشكل خفيف فقط." },
+          { s: 2, l: "2 - بشكل متكرر أو متوسط." },
+          { s: 3, l: "3 - غالبا أو بدرجة مخيفة جدا." },
+          { s: 4, l: "4 - بشكل مستمر تقريبا وبدرجة معيقة لمهامي." }
+        ]
+      },
+      {
+        q: "خلال الأسبوع الماضي: هل هنالك أماكن أو مواقف مثل: (وسائل النقل العام، السينما، الحشود، الجسور، الأنفاق، مراكز التسوق، البقاء بمفردك) تجنبتها أو شعرت بالخوف منها، بسبب الخوف من حدوث نوبة الهلع (عدم الارتياح، والرغبة في تجنبها أو المغادرة)؟ هل كانت هناك أي مواقف أخرى كنت ستتجنبها أو شعرت بالخوف منها، وقد حدثت خلال الأسبوع الماضي للسبب نفسه؟",
+        sub: "إذا كانت إجابتك \"نعم\" على أي من السؤالين، يرجى تقييم مستوى الخوف والتجنب لديك خلال الأسبوع الماضي؟",
+        options: [
+          { s: 0, l: "0 - لا خوف أو تجنب." },
+          { s: 1, l: "1 - خوف أو تجنب طفيف يمكنني عادة مواجهة الموقف أو تحمله، كان هناك تغيير طفيف أو لا يوجد تغيير في نمط حياتي بسبب ذلك." },
+          { s: 2, l: "2 - خوف أو تجنب ملحوظ، ولكنه لا يزال قابلا للتحمل، تجنبت بعض المواقف، ولكن كان يمكنني مواجهتها برفقة شخص آخر. كان هناك تغيير طفيف في نمط حياتي بسبب ذلك. لكن لم تتأثر وظائف حياتي العامة." },
+          { s: 3, l: "3 - شديد: تجنب موسع، كان من الضروري إجراء تغيير كبير في نمط حياتي لاستيعاب هذا التجنب، مما يجعل من الصعب إدارة الأنشطة المعتادة." },
+          { s: 4, l: "4 - شديد للغاية: خوف معيق شامل و/ أو تجنب. كان هناك تغيير شامل ومعيق في نمط حياتي بحيث لم تنجز المهام المهمة." }
+        ]
+      },
+      {
+        q: "خلال الأسبوع الماضي: هل كانت هناك أي أنشطة مثل: (النشاط البدني، العلاقات الجنسية، أخذ حمام ساخن، شرب القهوة، مشاهدة فيلم مثير أو مخيف) تجنبتها أو شعرت بالخوف منها (بسبب أنها غير مريحة، أو كنت ترغب في تجنبها أو التوقف عنها)؛ لأنها تسببت في شعور جسدي مشابه لتلك التي تشعر بها أثناء نوبات الهلع أو كنت تخشى أن تسبب نوبة هلع؟ هل هناك أي أنشطة أخرى كنت ستتجنبها وقد ظهرت خلال الأسبوع لهذا السبب؟",
+        sub: "إذا كانت الإجابة \"نعم\" على أي من الخيارين، يرجى تقييم مستوى الخوف والتجنب لديك لتلك الأنشطة خلال الأسبوع الماضي؟",
+        options: [
+          { s: 0, l: "0 - لا خوف أو تجنب للأوضاع أو الأنشطة بسبب المشاعر الجسدية المقلقة." },
+          { s: 1, l: "1 - خفيف: خوف أو تجنب أحيانا، لكن يمكنني عادة مواجهة أو تحمل تلك الأنشطة التي تسبب المشاعر الجسدية مع القليل من الضيق. لم يكن هناك سوى تغيير بسيط لنمط حياتي بسبب هذا." },
+          { s: 2, l: "2 - متوسط: تجنب ملحوظ لكنه ممكن السيطرة عليه، كان هناك تغيير محدود، ولكنه واضح في نمط حياتي بحيث إن وظيفتي العامة لم تتأثر." },
+          { s: 3, l: "3 - شديد: تجنب واسع النطاق، كان هناك تغيير كبير في نمط حياتي أو تأثير في وظيفتي." },
+          { s: 4, l: "4 - شديد للغاية: تجنب مستمر ومعيق، كان هناك تغيير كبير في نمط حياتي لدرجة أن المهام أو الأنشطة المهمة لم ينجز تنفيذها." }
+        ]
+      },
+      {
+        q: "خلال الأسبوع الماضي: إلى أي مدى أثرت الأعراض المذكورة أعلاه (نوبات الهلع وأعراضها المحدودة، القلق بشأن النوبات، أو خوف من المواقف والأنشطة بسبب النوبات) مجتمعة في قدرتك على العمل أو القيام بمسؤولياتك في المنزل؟",
+        sub: "(إذا لم تكن لديك مسؤوليات عمل أو منزل، برأيك كيف كنت ستؤدي هذه المهام إذا كانت لديك خلال الأسبوع الماضي)؟",
+        options: [
+          { s: 0, l: "0 - لا يوجد تأثير في مسؤوليات العمل أو المنزل." },
+          { s: 1, l: "1 - يوجد تأثير طفيف مع مسؤوليات العمل أو المنزل، لكن يمكنني القيام بكل شيء، إذا لم تكن لدي هذه المشاكل." },
+          { s: 2, l: "2 - يوجد تأثير كبير مع مسؤوليات العمل أو المنزل، لكنني كنت قادرا على القيام بالأشياء المطلوبة." },
+          { s: 3, l: "3 - إعاقة كبيرة في مسؤوليات العمل أو المنزل، كانت هناك أشياء مهمة لم أتمكن من القيام بها بسبب هذه المشاكل." },
+          { s: 4, l: "4 - إعاقة شديدة لدرجة أنني كنت غير قادر تماما على إدارة أي من مسؤوليات العمل أو المنزل." }
+        ]
+      },
+      {
+        q: "خلال الأسبوع الماضي: إلى أي مدى تسببت نوبات الهلع أو \"نوبات الأعراض المحدودة\"، والقلق بشأن النوبات، والخوف من المواقف والأنشطة في التأثير في حياتك الاجتماعية؟",
+        sub: "(إذا لم تكن لديك فرص كثيرة للتواصل الاجتماعي هذا الأسبوع، أجب كيف تعتقد أنك كنت ستتصرف إذا أتيحت لك الفرصة).",
+        options: [
+          { s: 0, l: "0 - لا يوجد تأثير على الإطلاق." },
+          { s: 1, l: "1 - يوجد تأثير طفيف في الأنشطة الاجتماعية، لكن يمكنني القيام بكل شيء تقريبا إذا لم أكن أواجه هذه المشاكل." },
+          { s: 2, l: "2 - يوجد تأثير كبير في الأنشطة الاجتماعية، لكن يمكنني القيام بمعظم الأشياء إذا بذلت مجهودا." },
+          { s: 3, l: "3 - ضعف كبير في الأنشطة الاجتماعية، هناك عدد من الأشياء الاجتماعية التي لم أتمكن من القيام بها بسبب هذه المشاكل." },
+          { s: 4, l: "4 - ضعف شديد، لدرجة أنه لم يكن هناك شيء اجتماعي تقريبا يمكنني القيام به." }
+        ]
+      }
+    ];
+
+    // State
+    const answers = new Array(questionsData.length).fill(null);
+
+    // DOM Elements
+    const questionsContainer = document.getElementById('questionsContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const btnCalculate = document.getElementById('btnCalculate');
+    const btnReset = document.getElementById('btnReset');
+    const reportSection = document.getElementById('reportSection');
+    const rawScoreDisplay = document.getElementById('rawScoreDisplay');
+    
+    // Summary Fields
+    const repName = document.getElementById('repName');
+    const repGender = document.getElementById('repGender');
+    const repDOB = document.getElementById('repDOB');
+    const repAge = document.getElementById('repAge');
+    const repDate = document.getElementById('repDate');
+    
+    // Inputs
+    const testDateInput = document.getElementById('testDate');
+    const userNameInput = document.getElementById('userName');
+    const userGenderInput = document.getElementById('userGender');
+    const userDOBInput = document.getElementById('userDOB');
+    
+    // Buttons
+    const btnPrintReport = document.getElementById('btnPrintReport');
+    const btnCopyReport = document.getElementById('btnCopyReport');
+    const toast = document.getElementById('toast');
+    const responsesTableBody = document.getElementById('responsesTableBody');
+
+    // Initialize Date to today automatically
+    const today = new Date().toISOString().split('T')[0];
+    testDateInput.value = today;
+
+    // Remove red borders on input change
+    userNameInput.addEventListener('input', () => userNameInput.classList.remove('input-error'));
+    userGenderInput.addEventListener('change', () => userGenderInput.classList.remove('input-error'));
+    userDOBInput.addEventListener('input', () => userDOBInput.classList.remove('input-error'));
+
+    // Helper: Calculate Age
+    function calculateAge(dobStr, testDateStr) {
+      if (!dobStr || !testDateStr) return '-';
+      const dob = new Date(dobStr);
+      const test = new Date(testDateStr);
+      let age = test.getFullYear() - dob.getFullYear();
+      const m = test.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && test.getDate() < dob.getDate())) {
+        age--;
+      }
+      return Math.max(0, age);
+    }
+
+    // Render Questions
+    function renderQuestions() {
+      questionsContainer.innerHTML = '';
+      questionsData.forEach((qItem, index) => {
+        const card = document.createElement('article');
+        card.className = 'question-card';
+        card.id = `qCard_${index}`;
+
+        const titleWrapper = document.createElement('div');
+        titleWrapper.className = 'question-title-wrapper';
+
+        const numSpan = document.createElement('div');
+        numSpan.className = 'question-num';
+        numSpan.textContent = "Q" + (index + 1);
+
+        const textContainer = document.createElement('div');
+        textContainer.className = 'question-text-container';
+        
+        const qTitle = document.createElement('div');
+        qTitle.className = 'question-text';
+        qTitle.textContent = qItem.q;
+        textContainer.appendChild(qTitle);
+
+        if(qItem.sub) {
+          const qSub = document.createElement('div');
+          qSub.className = 'question-subtitle';
+          qSub.textContent = qItem.sub;
+          textContainer.appendChild(qSub);
+        }
+
+        titleWrapper.appendChild(numSpan);
+        titleWrapper.appendChild(textContainer);
+        card.appendChild(titleWrapper);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+
+        qItem.options.forEach((opt, optIndex) => {
+          const label = document.createElement('label');
+          label.className = 'option-label';
+          label.id = `optLabel_${index}_${optIndex}`;
+
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `question_${index}`;
+          radio.value = opt.s;
+
+          radio.addEventListener('change', () => {
+            handleAnswerSelect(index, opt.s, optIndex, opt.l);
+          });
+
+          const optText = document.createElement('span');
+          optText.className = 'option-text';
+          optText.textContent = opt.l;
+
+          label.appendChild(radio);
+          label.appendChild(optText);
+          optionsGrid.appendChild(label);
+        });
+
+        card.appendChild(optionsGrid);
+        questionsContainer.appendChild(card);
+      });
+    }
+
+    function handleAnswerSelect(qIndex, score, optIndex, optLabel) {
+      answers[qIndex] = { score, optIndex, label: optLabel };
+      
+      const card = document.getElementById(`qCard_${qIndex}`);
+      card.classList.add('answered');
+      card.classList.remove('highlight');
+
+      questionsData[qIndex].options.forEach((_, idx) => {
+        const lbl = document.getElementById(`optLabel_${qIndex}_${idx}`);
+        if (idx === optIndex) {
+          lbl.classList.add('checked');
+        } else {
+          lbl.classList.remove('checked');
+        }
+      });
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answeredCount = answers.filter(a => a !== null).length;
+      const total = questionsData.length;
+      const pct = Math.round((answeredCount / total) * 100);
+
+      progressText.textContent = `${answeredCount} / ${total} بنود`;
+      progressPercent.textContent = `${pct}%`;
+      progressBar.style.width = `${pct}%`;
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.className = 'show';
+      setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+      }, 3000);
+    }
+
+    function generateReport() {
+      // Validate inputs
+      const nameVal = userNameInput.value.trim();
+      const genderVal = userGenderInput.value;
+      const dobVal = userDOBInput.value;
+      const dateVal = testDateInput.value;
+
+      let hasError = false;
+      if (!nameVal) {
+        userNameInput.classList.add('input-error');
+        hasError = true;
+      }
+      if (!genderVal) {
+        userGenderInput.classList.add('input-error');
+        hasError = true;
+      }
+      if (!dobVal) {
+        userDOBInput.classList.add('input-error');
+        hasError = true;
+      }
+      
+      if (hasError) {
+        showToast('يرجى ملء البيانات الأساسية المطلوبة أولاً.');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const unansweredIndices = [];
+      answers.forEach((ans, idx) => {
+        if (ans === null) unansweredIndices.push(idx);
+      });
+
+      if (unansweredIndices.length > 0) {
+        const firstMissing = unansweredIndices[0];
+        const card = document.getElementById(`qCard_${firstMissing}`);
+        card.classList.add('highlight');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast(`يرجى الإجابة عن البند رقم (${firstMissing + 1}) أولاً`);
+        return;
+      }
+
+      // Calculate total raw score
+      const totalScore = answers.reduce((sum, item) => sum + item.score, 0);
+      rawScoreDisplay.textContent = totalScore;
+
+      // Populate Meta
+      repName.textContent = nameVal;
+      repGender.textContent = genderVal;
+      repDOB.textContent = dobVal;
+      repAge.textContent = calculateAge(dobVal, dateVal || today);
+      repDate.textContent = dateVal || today;
+
+      // Populate Table
+      responsesTableBody.innerHTML = '';
+      questionsData.forEach((qItem, idx) => {
+        const tr = document.createElement('tr');
+        const ans = answers[idx];
+
+        tr.innerHTML = `
+          <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+          <td>
+            <div style="font-weight:600; margin-bottom:4px;">${qItem.q}</div>
+            ${qItem.sub ? `<div style="font-size:0.85rem; color:#64748b;">${qItem.sub}</div>` : ''}
+          </td>
+          <td style="font-weight: 600; font-size: 0.9rem;">${ans.label}</td>
+          <td style="text-align: center; font-weight: 800; color: var(--primary); font-size:1.1rem;">${ans.score}</td>
+        `;
+        responsesTableBody.appendChild(tr);
+      });
+
+      reportSection.style.display = 'block';
+      reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetTest() {
+      answers.fill(null);
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.option-label').forEach(l => l.classList.remove('checked'));
+      document.querySelectorAll('.question-card').forEach(c => {
+        c.classList.remove('answered');
+        c.classList.remove('highlight');
+      });
+      userNameInput.value = '';
+      userGenderInput.value = '';
+      userDOBInput.value = '';
+      userNameInput.classList.remove('input-error');
+      userGenderInput.classList.remove('input-error');
+      userDOBInput.classList.remove('input-error');
+      
+      updateProgress();
+      reportSection.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('تمت إعادة ضبط ومسح الاستمارة بنجاح');
+    }
+
+    function copyReportToClipboard() {
+      const totalScore = rawScoreDisplay.textContent;
+      const nameVal = repName.textContent;
+      const genderVal = repGender.textContent;
+      const dobVal = repDOB.textContent;
+      const ageVal = repAge.textContent;
+      const dateVal = repDate.textContent;
+
+      let itemsSummary = '';
+      questionsData.forEach((qItem, idx) => {
+        const ans = answers[idx];
+        itemsSummary += `س${idx + 1}. ${qItem.q}\n   [الإجابة: ${ans.label} | الدرجة: ${ans.score}]\n\n`;
+      });
+
+      const summaryText = `*تقرير استجابات مقياس اضطراب الهلع (المُقنن)*\n` +
+        `----------------------------------------\n` +
+        `👤 المستجيب: ${nameVal}\n` +
+        `⚧ الجنس: ${genderVal}\n` +
+        `🎂 تاريخ الميلاد: ${dobVal} (العمر: ${ageVal} سنة)\n` +
+        `📅 تاريخ الإجراء: ${dateVal}\n` +
+        `----------------------------------------\n` +
+        `📊 إجمالي الدرجة الخام: ${totalScore} من 28\n` +
+        `----------------------------------------\n` +
+        `📋 تفصيل الإجابات:\n\n` +
+        itemsSummary +
+        `----------------------------------------\n` +
+        `📌 هذا التقرير مخصص للأخصائي النفسي لاستكمال التقييم والتشخيص.`;
+
+      navigator.clipboard.writeText(summaryText).then(() => {
+        showToast('تم نسخ التقرير بنجاح! يمكنك لصقه الآن.');
+      }).catch(() => {
+        showToast('تعذر النسخ التلقائي، يرجى التحديد والنسخ يدوياً.');
+      });
+    }
+
+    // Event Listeners
+    btnCalculate.addEventListener('click', generateReport);
+    btnReset.addEventListener('click', resetTest);
+    
+    // Using native browser print for high quality PDF layout (same as the attached code)
+    btnPrintReport.addEventListener('click', () => {
+      window.print();
+    });
+    
+    btnCopyReport.addEventListener('click', copyReportToClipboard);
+
+    // Initial Render
+    renderQuestions();
+    updateProgress();
+  </script>
+</body>
+</html>
